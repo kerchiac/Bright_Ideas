@@ -37,11 +37,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for user in users  %}
-                            <tr>   
-                                <td><a href="/user/{{ user.id }}">{{ user.alias }}</a></td>
-                                <td> {{ user.name }}</td>
-                            </tr>
+                        {% for person in idea.liked_by %}
+                        <tr>   
+                            <td><a href="/user/{{ person.id}}">{{ person.alias }}</a></td>
+                            <td> {{ person.name }}</td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>

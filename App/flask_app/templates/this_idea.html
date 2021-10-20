@@ -17,7 +17,7 @@
     </div>
     
     <div class="content col-8 mx-auto m-5">
-        <a href="/bright_ideas/{{ idea.id }}"> {{user.alias}} </a><span>says: </span> 
+        <a href="/user/{{user.id}}"> {{user.alias}} </a><span>says: </span> 
         <p class="border border-1 bg-light col-10">{{ idea.content }}</p>
     </div>
 
@@ -32,10 +32,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% for user in users %}
+                {% for person in idea.liked_by %}
                 <tr>   
-                    <td><a href="/user/{{ user.user_id }}">{{ user.alias }}</a></td>
-                    <td> {{ user.name }}</td>
+                    <td><a href="/user/{{ person.id}}">{{ person.alias }}</a></td>
+                    <td> {{ person.name }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

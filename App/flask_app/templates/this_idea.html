@@ -9,38 +9,44 @@
 
 </head>
 <body>
-    <div class="container-s col-8 mx-auto m-5 p-5">
-        <nav class="nav justify-content-end ">
+    <div class="container mx-auto p-5 mt-5">
+        <nav class="nav justify-content-end">
             <a class="nav-link" href="/bright_ideas">Bright Ideas</a>
             <a class="nav-link" href="/logout">Log Out</a>
         </nav>
-    </div>
-    
-    <div class="content col-8 mx-auto m-5">
-        <a href="/user/{{user.id}}"> {{user.alias}} </a><span>says: </span> 
-        <p class="border border-1 bg-light col-10">{{ idea.content }}</p>
-    </div>
 
-
-    <div class="container-fluid col-sm-4">
-        <h5>People who liked this post:</h5>
-        <table class="table table-hover ">
-            <thead>
-                <tr>
-                    <th>Alias</th>
-                    <th>Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for person in idea.liked_by %}
-                <tr>   
-                    <td><a href="/user/{{ person.id}}">{{ person.alias }}</a></td>
-                    <td> {{ person.name }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>    
-    </div>   
+        <br />
         
+        <div class="row mt-5">
+            <div class="col-4 text-end">
+                <a href="/bright_ideas/{{ idea.id }}"> {{ user.alias }} </a><span>says: </span>
+            </div>
+            <div class="col-8">
+                <p class="border border-1 bg-light col-10">{{ idea.content }}</p>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col text-center">
+                <h6 class="text-start">People who liked this post:</h6>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Alias</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users  %}
+                            <tr>   
+                                <td><a href="/user/{{ user.id }}">{{ user.alias }}</a></td>
+                                <td> {{ user.name }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

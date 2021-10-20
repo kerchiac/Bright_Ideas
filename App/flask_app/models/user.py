@@ -57,12 +57,12 @@ class User:
         return is_valid
 
     @classmethod
-    def get_by_id(cls,data):
+    def get_by_id(cls,data): # <-----I changed this method and split it into two as you will see below.
         query = "SELECT * FROM users LEFT JOIN likes ON users.id=likes.user_id LEFT JOIN ideas ON ideas.id=likes.idea_id WHERE users.id = %(id)s;"
         results = connectToMySQL(cls.db).query_db(query,data)
         user = cls(results[0])
         for row in results:
-            # # if there are no favorites
+            # # if there are no favorites   
             # if row['users.id'] == None:
             #     break
             # common column names come back with specific tables attached
@@ -74,9 +74,13 @@ class User:
                 "updated_at": row['ideas.updated_at']
             }
             user.liked_ideas.append(idea.Idea(data))
+            return user
+
+    @classmethod
+    def get_id(cls,data): #<-----By splitting the above method into two this method is not returning and ID in the query instead of NULL
         query = "SELECT * FROM users LEFT JOIN ideas ON users.id=ideas.sender_id WHERE users.id = %(id)s;"
         results = connectToMySQL(cls.db).query_db(query,data)
-        # user = cls(results[0])
+        user1 = cls(results[0])
         for row in results:
             # # if there are no favorites
             # if row['users.id'] == None:
@@ -89,16 +93,5 @@ class User:
                 "created_at": row['ideas.created_at'],
                 "updated_at": row['ideas.updated_at']
             }
-            user.ideas_posted.append(idea.Idea(data))
-        return user
-
-#     @classmethod
-#     def get_all(cls):
-#         query = "SELECT * FROM users;"
-#         results = connectToMySQL(cls.db).query_db(query)
-#         users = []
-#         for row in results:
-#             users.append( cls(row))
-#         return users
-
-
+            user1.ideas_posted.append(idea.Idea(data))
+        return user1

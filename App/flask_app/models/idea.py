@@ -34,6 +34,7 @@ class Idea:
             cls.tot_likes=row['tot_likes']
             cls.username=row['name']
             ideas.append(cls(row))
+            print(ideas) #<--- Not sure why but this is returning ([<flask_app.models.idea.Idea object at 0x000001B06ACF3E20>])  
         return ideas
 
     @classmethod

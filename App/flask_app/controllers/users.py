@@ -42,10 +42,9 @@ def get_user(id):
     data ={ 
         "id": id
     }
-    return render_template('user.html',user=User.get_by_id(data))
+    return render_template('user.html',user=User.get_by_id(data), user1=User.get_id(data))
 
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/')
-

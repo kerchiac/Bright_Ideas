@@ -11,18 +11,41 @@ def main():
 
 @app.route('/register',methods=['POST'])
 def register():
-    pass
+    if not User.validate_register(request.form):
+        return redirect('/')
+    data ={ 
+        "name": request.form['name'],
+        "alias": request.form['alias'],
+        "email": request.form['email'],
+        "password_un":request.form['password'],
+        "password": bcrypt.generate_password_hash(request.form['password'])
+    }
+    id = User.save(data)
+    session['user_id'] = id
+    return redirect('/bright_ideas')
 
 @app.route('/login',methods=['POST'])
 def login():
-    pass
+    user = User.get_by_email(request.form)
+    if not user:
+        flash("Invalid Email","login")
+        return redirect('/')
+    if not bcrypt.check_password_hash(user.password, request.form['password']):
+        flash("Invalid Password","login")
+        return redirect('/')
+    session['user_id'] = user.id
+    return redirect('/bright_ideas')
+
 
 @app.route('/user/<int:id>')
-def user():
-    pass
-    # return render_template('user.html')
+def get_user(id):
+    data ={ 
+        "id": id
+    }
+    return render_template('user.html',user=User.get_by_id(data))
 
 @app.route('/logout')
 def logout():
-    pass
+    session.clear()
+    return redirect('/')
 

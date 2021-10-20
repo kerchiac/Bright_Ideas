@@ -22,8 +22,8 @@
                 <p class="card-text">Alias: {{ user.alias }}</p>
                 <p class="card-text pb-4">Email: {{ user.email }}</p>
                 <hr>
-                <p class="card-text pt-4">Total Number of Posts: {{  }}</p>
-                <p class="card-text">Total Number of Likes: {{  }}</p>          
+                <p class="card-text pt-4">Total Number of Posts: {{user.ideas_posted|length}}</p>
+                <p class="card-text">Total Number of Likes: {{user.liked_ideas|length}}</p>       
             </div>
         </div>
     </div>

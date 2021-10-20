@@ -9,7 +9,7 @@ def post_idea():
         return redirect('/')
     data = {
         "content":  request.form['content'],
-        "sender_id": 'user_id'
+        "sender_id": session['user_id']
     }
     Idea.save(data)
     return redirect('/bright_ideas')
@@ -33,16 +33,18 @@ def like_this_idea(id):
 
 @app.route('/bright_ideas')
 def all_ideas():
-    data={
-        "name":'User Name Placeholder',
+    data ={
+        'id': session['user_id']
     }
-    return render_template('dashboard.html',ideas=Idea.get_all_ideas(),user=data)
+    return render_template('dashboard.html',ideas=Idea.get_all_ideas(),user=User.get_by_id(data))
+
 
 @app.route('/bright_ideas/<int:id>')
 def this_idea(id):
     data={
         "id": id,
-        "name":'User Name Placeholder',
-        "alias": "User Alias Placeholder"
     }
-    return render_template('this_idea.html',idea=Idea.get_this_idea(data),users=Idea.get_this_idea(data),user=data)
+    data2={
+        'id': session['user_id']
+    }
+    return render_template('this_idea.html',idea=Idea.get_this_idea(data),user=User.get_by_id(data2))

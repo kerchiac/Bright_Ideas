@@ -34,6 +34,9 @@ class Idea:
                 "LEFT JOIN likes on likes.idea_id=ideas.id "\
                 "LEFT JOIN users as users2 on users2.id=likes.user_id;"
         results = connectToMySQL(cls.db_name).query_db(query)
+        if len(results)==0:
+            all_ideas=None
+            return all_ideas
         all_ideas = []
         for row in results:
             new_idea=True

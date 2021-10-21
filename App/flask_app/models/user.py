@@ -60,13 +60,15 @@ class User:
     @classmethod
     def get_by_id(cls,data):
         # query = "SELECT * FROM users "\
-        #         "LEFT JOIN likes ON users.id=likes.user_id "\
-        #         "LEFT JOIN ideas ON ideas.id=likes.idea_id "\
+        #         "LEFT JOIN ideas ON users.id=ideas.sender_id"\
         #         "WHERE users.id = %(id)s;"
         query = "Select * from ideas "\
                 "LEFT JOIN users ON ideas.sender_id = users.id "\
                 "WHERE users.id=%(id)s;"
         results = connectToMySQL(cls.db).query_db(query,data)
+        if len(results)==0:
+            user_posted=None
+            return user_posted
         user_posted = cls(results[0])
         for row in results:
             ideas_posted_data = {
@@ -78,6 +80,31 @@ class User:
             }
             user_posted.ideas_posted.append(idea.Idea(ideas_posted_data))
         return user_posted
+
+        # @classmethod
+        # def get_likes_by_id(cls,data):
+        #     query = "SELECT * FROM ideas "\
+        #             "LEFT JOIN likes ON ideas.id=likes.idea_id"\
+        #             "LEFT JOIN users ON users.id=likes.user_id"\
+        #             "WHERE users.id = %(id)s;"
+        #     # query = "Select * from ideas "\
+        #     #         "LEFT JOIN users ON ideas.sender_id = users.id "\
+        #     #         "WHERE users.id=%(id)s;"
+        #     results = connectToMySQL(cls.db).query_db(query,data)
+        #     if len(results)==0:
+        #         user_posted=None
+        #         return user_posted
+        #     user_posted = cls(results[0])
+        #     for row in results:
+        #         ideas_posted_data = {
+        #             "id": row['ideas.id'],
+        #             "content": row['content'],
+        #             "sender_id": row['sender_id'],
+        #             "created_at": row['created_at'],
+        #             "updated_at": row['updated_at']
+        #         }
+        #         user_posted.ideas_posted.append(idea.Idea(ideas_posted_data))
+        #     return user_posted
 
 #     @classmethod
 #     def get_all(cls):

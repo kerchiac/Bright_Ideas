@@ -19,7 +19,7 @@
         
         <div class="row mt-5">
             <div class="col-4 text-end">
-                <a href="/bright_ideas/{{ idea.id }}"> {{ user.alias }} </a><span>says: </span>
+                <p>{{idea.user_created[0].name}} says: </p>
             </div>
             <div class="col-8">
                 <p class="border border-1 bg-light col-10">{{ idea.content }}</p>
@@ -37,7 +37,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for person in idea.liked_by %}
+                        {% for person in idea.users_liked %}
                         <tr>   
                             <td><a href="/user/{{ person.id}}">{{ person.alias }}</a></td>
                             <td> {{ person.name }}</td>

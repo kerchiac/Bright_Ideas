@@ -26,7 +26,7 @@ def destroy_idea(id):
 def like_this_idea(id):
     data = {
         "idea_id": id,
-        "user_id": 'user_id'
+        "user_id": session['user_id']
     }
     Idea.like_idea(data)
     return redirect('/bright_ideas')

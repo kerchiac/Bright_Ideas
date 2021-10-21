@@ -18,6 +18,7 @@ class User:
         self.updated_at = data['updated_at']
         self.liked_ideas =[]
         self.ideas_posted =[]
+        self.all_ideas=[]
 
     @classmethod
     def save(cls,data):
@@ -58,39 +59,25 @@ class User:
 
     @classmethod
     def get_by_id(cls,data):
-        query = "SELECT * FROM users LEFT JOIN likes ON users.id=likes.user_id LEFT JOIN ideas ON ideas.id=likes.idea_id WHERE users.id = %(id)s;"
+        # query = "SELECT * FROM users "\
+        #         "LEFT JOIN likes ON users.id=likes.user_id "\
+        #         "LEFT JOIN ideas ON ideas.id=likes.idea_id "\
+        #         "WHERE users.id = %(id)s;"
+        query = "Select * from ideas "\
+                "LEFT JOIN users ON ideas.sender_id = users.id "\
+                "WHERE users.id=%(id)s;"
         results = connectToMySQL(cls.db).query_db(query,data)
-        user = cls(results[0])
+        user_posted = cls(results[0])
         for row in results:
-            # # if there are no favorites
-            # if row['users.id'] == None:
-            #     break
-            # common column names come back with specific tables attached
-            data = {
-                "id": row['ideas.id'],
+            ideas_posted_data = {
+                "id": row['id'],
                 "content": row['content'],
                 "sender_id": row['sender_id'],
-                "created_at": row['ideas.created_at'],
-                "updated_at": row['ideas.updated_at']
+                "created_at": row['created_at'],
+                "updated_at": row['updated_at']
             }
-            user.liked_ideas.append(idea.Idea(data))
-        query = "SELECT * FROM users LEFT JOIN ideas ON users.id=ideas.sender_id WHERE users.id = %(id)s;"
-        results = connectToMySQL(cls.db).query_db(query,data)
-        # user = cls(results[0])
-        for row in results:
-            # # if there are no favorites
-            # if row['users.id'] == None:
-            #     break
-            # common column names come back with specific tables attached
-            data = {
-                "id": row['ideas.id'],
-                "content": row['content'],
-                "sender_id": row['sender_id'],
-                "created_at": row['ideas.created_at'],
-                "updated_at": row['ideas.updated_at']
-            }
-            user.ideas_posted.append(idea.Idea(data))
-        return user
+            user_posted.ideas_posted.append(idea.Idea(ideas_posted_data))
+        return user_posted
 
 #     @classmethod
 #     def get_all(cls):

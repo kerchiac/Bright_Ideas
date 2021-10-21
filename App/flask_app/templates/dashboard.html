@@ -26,9 +26,9 @@
         </div>
         {% for idea in ideas %}
         <div class="content col-8 mx-auto m-5">
-            <a href="/bright_ideas/{{ idea.id }}"> {{idea.username}} </a><span>says: </span> 
+            <a href="/bright_ideas/{{idea.id }}"> {{idea.user_created.name}} </a><span>says: </span> 
             <p class="border border-1 bg-light col-10">{{ idea.content }}</p>
-            <form action="/like/idea/{{ idea.id }}" method="post"><input type="submit" value="Like"></form><a href="/like/idea"> {{ tot_likes}} people</a> <span>like this</span>
+            <form action="/like/idea/{{idea.id}}" method="post"><input type="submit" value="Like"></form><a href="/like/idea"></a> <span>{{idea.users_liked|length}} people like this</span>
         </div>
         {% endfor %}
     </div>

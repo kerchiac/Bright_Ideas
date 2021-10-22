@@ -18,7 +18,6 @@ class User:
         self.updated_at = data['updated_at']
         self.liked_ideas =[]
         self.ideas_posted =[]
-        self.all_ideas=[]
 
     @classmethod
     def save(cls,data):
@@ -59,60 +58,18 @@ class User:
 
     @classmethod
     def get_by_id(cls,data):
-        # query = "SELECT * FROM users "\
-        #         "LEFT JOIN ideas ON users.id=ideas.sender_id"\
-        #         "WHERE users.id = %(id)s;"
-        query = "Select * from ideas "\
-                "LEFT JOIN users ON ideas.sender_id = users.id "\
-                "WHERE users.id=%(id)s;"
+        # query = "Select * from ideas "\
+        #         "LEFT JOIN users ON ideas.sender_id = users.id "\
+        #         "WHERE users.id=%(id)s;"
+
+        query = "SELECT users.*, count(distinct ideas.id) as ideas_posted, count(distinct likes.idea_id) as liked_ideas from users "\
+                "LEFT JOIN ideas on users.id=ideas.sender_id "\
+                "LEFT JOIN likes on likes.user_id=users.id "\
+                "WHERE users.id=%(id)s "\
+                "GROUP BY users.id;"
+
         results = connectToMySQL(cls.db).query_db(query,data)
-        if len(results)==0:
-            user_posted=None
-            return user_posted
         user_posted = cls(results[0])
-        for row in results:
-            ideas_posted_data = {
-                "id": row['id'],
-                "content": row['content'],
-                "sender_id": row['sender_id'],
-                "created_at": row['created_at'],
-                "updated_at": row['updated_at']
-            }
-            user_posted.ideas_posted.append(idea.Idea(ideas_posted_data))
+        user_posted.ideas_posted = results[0]['ideas_posted']
+        user_posted.liked_ideas = results[0]['liked_ideas']
         return user_posted
-
-        # @classmethod
-        # def get_likes_by_id(cls,data):
-        #     query = "SELECT * FROM ideas "\
-        #             "LEFT JOIN likes ON ideas.id=likes.idea_id"\
-        #             "LEFT JOIN users ON users.id=likes.user_id"\
-        #             "WHERE users.id = %(id)s;"
-        #     # query = "Select * from ideas "\
-        #     #         "LEFT JOIN users ON ideas.sender_id = users.id "\
-        #     #         "WHERE users.id=%(id)s;"
-        #     results = connectToMySQL(cls.db).query_db(query,data)
-        #     if len(results)==0:
-        #         user_posted=None
-        #         return user_posted
-        #     user_posted = cls(results[0])
-        #     for row in results:
-        #         ideas_posted_data = {
-        #             "id": row['ideas.id'],
-        #             "content": row['content'],
-        #             "sender_id": row['sender_id'],
-        #             "created_at": row['created_at'],
-        #             "updated_at": row['updated_at']
-        #         }
-        #         user_posted.ideas_posted.append(idea.Idea(ideas_posted_data))
-        #     return user_posted
-
-#     @classmethod
-#     def get_all(cls):
-#         query = "SELECT * FROM users;"
-#         results = connectToMySQL(cls.db).query_db(query)
-#         users = []
-#         for row in results:
-#             users.append( cls(row))
-#         return users
-
-
